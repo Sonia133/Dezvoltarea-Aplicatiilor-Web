@@ -1,0 +1,17 @@
+﻿@model LabApp.Models.Book
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+<div class="panel-body">
+    @Html.Label("Title", "Title: ")
+    <br />
+    <p>@Model.Title</p>
+    @Html.Label("Author", "Author: ")
+    <br />
+    <p>@Model.Author</p>
+</div>
+
+@Html.ActionLink("Back", "Index")
+

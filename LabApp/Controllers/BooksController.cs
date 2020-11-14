@@ -21,9 +21,50 @@ namespace LabApp.Controllers
             return View();
         }
 
-        public ActionResult Details(int bookId)
+        [HttpGet]
+        public ActionResult New()
         {
-            return View();
+            Book book = new Book
+            {
+                Genres = new List<Genre>()
+            };
+            return View(book);
+        }
+
+        [HttpPost]
+        public ActionResult Create(Book bookRequest)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    bookRequest.Publisher = db.Publishers.FirstOrDefault(predicate => predicate.PublisherId.Equals(1));
+                    bookRequest.DateCreation = DateTime.Now;
+                    db.Books.Add(bookRequest);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                return View(bookRequest);
+            }
+            catch(Exception e)
+            {
+                return View(bookRequest);
+            }
+        }
+
+        [HttpGet]
+        public ActionResult Details(int? id)
+        {
+            if (id.HasValue)
+            {
+                Book book = db.Books.Find(id);
+                if (book != null)
+                {
+                    return View(book);
+                }
+                return HttpNotFound("Couldn't find a book with this id!");
+            }
+            return HttpNotFound("Missing book id parameter!");
         }
     }
 }
